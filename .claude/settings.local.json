@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(try { \\(Invoke-WebRequest -Uri 'http://127.0.0.1:5173/@vite/client' -TimeoutSec 3 -UseBasicParsing\\).StatusCode } catch { \"DEV SERVER NOT RUNNING: $\\($_.Exception.Message\\)\" })"
+    ]
+  }
+}
