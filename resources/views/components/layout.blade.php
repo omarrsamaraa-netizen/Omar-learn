@@ -25,6 +25,10 @@
     </header>
 
     <main class="page">
+        @if (session('status'))
+            <p class="mb-8 border-l-2 border-brass pl-4 text-ink">{{ session('status') }}</p>
+        @endif
+
         {{ $slot }}
     </main>
 </body>

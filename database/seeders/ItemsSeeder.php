@@ -2,16 +2,16 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Item;
 use Illuminate\Database\Seeder;
 
 class ItemsSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Seed the items table with random records.
      */
     public function run(): void
     {
-        //
+        Item::factory()->count(20)->create();
     }
 }

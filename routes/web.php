@@ -1,30 +1,28 @@
 <?php
 
+use App\Http\Controllers\ItemController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('welcome'); })->name('home');
 
 
-Route::get('/main', function () {
-
- $category=[
-   ["name" => "watches", "matireals" => "gold","rate" => "60", "id" => "1"], 
-   ["name" => "suits", "matireals" => "fabric", "rate" => "70", "id" => "2"],
-
- ];
+Route::prefix('main')->group(function () {
+Route::get('/', [ItemController::class, 'index'])->name('main.index');
 
 
-    return view('main.index', ["luxury" => "be a gentle" , "category"=> $category]);
-});
+Route::get('/create', [ItemController::class, 'create'])->name('main.create');
 
-Route::get('/main/create', function () {
-    return view('main.create');
-});
+Route::post('/', [ItemController::class, 'store'])->name('main.store');
 
-Route::get('/main/{id}', function ($id) {
+Route::get('/{item}', [ItemController::class, 'show'])->name('main.show');
 
- 
-    return view('main.show', ["id"=> $id]);
+Route::get('/{item}/edit', [ItemController::class, 'edit'])->name('main.edit');
+
+Route::put('/{item}', [ItemController::class, 'update'])->name('main.update');
+
+Route::delete('/{item}', [ItemController::class, 'destroy'])->name('main.destroy');
+
+
+
 });

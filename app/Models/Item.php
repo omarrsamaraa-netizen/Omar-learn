@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model
 {
-    protected $fillable = ['name' , 'rate' , 'caption'] ; 
+    protected $fillable = ['name', 'rate', 'caption'];
 
     use HasFactory;
 }
