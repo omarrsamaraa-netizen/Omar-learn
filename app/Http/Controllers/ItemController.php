@@ -12,18 +12,16 @@ class ItemController extends Controller
     public function index(): View
     {
 
-        $Items = Item::orderBy('created_at', 'desc')->get();
+        $Items = Item::orderBy('created_at', 'desc')->paginate(10);
 
         return view('main.index', ['category' => $Items]);
     }
 
-    
     public function create(): View
     {
         return view('main.create');
     }
 
-    
     public function store(Request $request): RedirectResponse
     {
         $item = Item::create($this->validatedItem($request));
@@ -33,7 +31,6 @@ class ItemController extends Controller
             ->with('status', 'Piece added to the collection.');
     }
 
-   
     public function show(Item $item): View
     {
         return view('main.show', [
@@ -42,13 +39,11 @@ class ItemController extends Controller
         ]);
     }
 
-    
     public function edit(Item $item): View
     {
         return view('main.edit', ['item' => $item]);
     }
 
-    
     public function update(Request $request, Item $item): RedirectResponse
     {
         $item->update($this->validatedItem($request));
@@ -58,7 +53,6 @@ class ItemController extends Controller
             ->with('status', 'Piece updated.');
     }
 
-    
     public function destroy(Item $item): RedirectResponse
     {
         $item->delete();
@@ -68,7 +62,6 @@ class ItemController extends Controller
             ->with('status', 'Piece removed from the collection.');
     }
 
-    
     private function validatedItem(Request $request): array
     {
         return $request->validate([

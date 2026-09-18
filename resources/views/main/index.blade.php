@@ -14,4 +14,6 @@
             </li>
         @endforeach
     </ul>
+
+    {{ $category->links() }}
 </x-layout>

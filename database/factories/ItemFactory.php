@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use App\Models\Item;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -35,6 +36,7 @@ class ItemFactory extends Factory
             'name' => fake()->randomElement(self::MATERIALS).' '.fake()->randomElement(self::PIECES),
             'caption' => fake()->realText(300),
             'rate' => fake()->numberBetween(0, 100),
+            'category_id' => Category::inRandomOrder()->first()->id,
         ];
     }
 
