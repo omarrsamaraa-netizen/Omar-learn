@@ -20,5 +20,16 @@
         </form>
 
         <a href="{{ route('main.index') }}" class="nav-link">Back to collection</a>
+
+
+    </div>
+
+    <div class="border-2 border-dashed bg-white px-4 pb-4 my-4 rounded">
+
+        <h3>Category Info</h3>
+        <p><strong>Category name:</strong> {{ $item->category->name }}</p> 
+        <p><strong>Description:</strong> {{ $item->category->description}}</p> 
+        <p><strong>About the category :</strong></p>
+        <p>{{ $item->category->image }}</p>
     </div>
 </x-layout>

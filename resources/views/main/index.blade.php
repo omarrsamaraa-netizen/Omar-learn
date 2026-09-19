@@ -9,7 +9,10 @@
         @foreach ($category as $item)
             <li>
                 <x-card href="/main/{{ $item->id }}" :highlight="$item['rate'] > 70">
-                    <h3>{{ $item->name }}</h3>
+                    <div>
+                        <h3>{{ $item->name }}</h3>
+                        <p>{{ $item->category->name }}</p>
+                    </div>
                 </x-card>
             </li>
         @endforeach

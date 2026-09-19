@@ -7,7 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model
 {
-    protected $fillable = ['name', 'rate', 'caption'];
+    protected $fillable = ['name', 'rate', 'caption', 'category_id'];
 
     use HasFactory;
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }
