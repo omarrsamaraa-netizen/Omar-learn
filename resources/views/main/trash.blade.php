@@ -1,12 +1,10 @@
 <x-layout>
-    <div class="section-head flex flex-wrap items-end justify-between gap-4">
-        <div>
-            <p class="eyebrow">The collection</p>
-            <h2>Available now</h2>
-            <p class="lead">Be a gentleman.</p>
-        </div>
+    <div class="section-head">
+        <a href="{{ route('main.index') }}" class="nav-link">Back to collection</a>
 
-        <a href="{{ route('main.trash') }}" class="btn btn-espresso">Trash</a>
+        <p class="eyebrow mt-4">The collection</p>
+        <h2>Trash</h2>
+        <p class="lead">Pieces removed from the collection.</p>
     </div>
 
     <ul class="card-grid">

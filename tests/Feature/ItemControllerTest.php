@@ -12,7 +12,8 @@ it('lists items on the index page', function () {
     $this->get(route('main.index'))
         ->assertOk()
         ->assertSee('Gold Wristwatch')
-        ->assertSee('/main/'.$item->id);
+        ->assertSee('/main/'.$item->id)
+        ->assertSee(route('main.trash'));
 });
 
 it('shows the create form', function () {
@@ -63,6 +64,27 @@ it('shows a single item', function () {
         ->assertSee('Silk Tie')
         ->assertSee($item->caption)
         ->assertSee('64');
+});
+
+it('lists only trashed items on the trash page', function () {
+    $trashed = Item::factory()->create(['name' => 'Discarded Cufflinks']);
+    $kept = Item::factory()->create(['name' => 'Kept Overcoat']);
+    $trashed->delete();
+
+    $this->get(route('main.trash'))
+        ->assertOk()
+        ->assertSee('Discarded Cufflinks')
+        ->assertDontSee('Kept Overcoat')
+        ->assertDontSee(route('main.trash'));
+});
+
+it('shows a trashed item from the trash page', function () {
+    $item = Item::factory()->create(['name' => 'Discarded Cufflinks']);
+    $item->delete();
+
+    $this->get(route('main.show', $item))
+        ->assertOk()
+        ->assertSee('Discarded Cufflinks');
 });
 
 it('returns 404 for an item that does not exist', function () {

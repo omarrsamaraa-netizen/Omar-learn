@@ -4,7 +4,7 @@
         <h2>Add an item</h2>
     </div>
 
-    <form method="POST" action="{{ route('main.store') }}" class="form">
+    <form  action="{{ route('main.store') }}" method="POST" class="form">
         @csrf
 
         {{-- item name --}}

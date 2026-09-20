@@ -16,17 +16,34 @@ class ItemController extends Controller
         $Items = Item::with('category')->orderBy('created_at', 'desc')->paginate(10);
 
         return view('main.index', ['category' => $Items]);
+
+    }
+
+    public function trash(): View
+    {
+        $Items = Item::onlyTrashed()->orderBy('created_at', 'desc')->paginate(10);
+
+        return view('main.trash', ['category' => $Items]);
+
     }
 
     public function create(): View
     {
         $categories = Category::all();
+
         return view('main.create', ['categories' => $categories]);
     }
 
     public function store(Request $request): RedirectResponse
     {
         $item = Item::create($this->validatedItem($request));
+        $validate = $request->validate([
+            'name' => 'required|string|max:255',
+            'caption' => 'required|string|max:1000',
+        
+
+
+        ]);
 
         return redirect()
             ->route('main.show', $item)
@@ -35,7 +52,7 @@ class ItemController extends Controller
 
     public function show(Item $item): View
     {
-        $item = Item::with('category')->findOrFail($item->id);
+        $item->load('category');
 
         return view('main.show', [
             'id' => $item->id,
@@ -67,6 +84,26 @@ class ItemController extends Controller
         return redirect()
             ->route('main.index')
             ->with('status', 'Piece removed from the collection.');
+    }
+
+    public function permenentDelete(Item $item): RedirectResponse
+    {
+        $item->forceDelete();
+
+        return redirect()
+            ->route('main.index')
+            ->with('status', 'Piece removed completly from the collection.');
+    }
+
+    public function restore(Item $item): RedirectResponse
+    {
+        if ($item->trashed()) {
+            $item->restore();
+        }
+
+        return redirect()
+            ->route('main.index')
+            ->with('status', 'Piece restored successfully to the collection.');
     }
 
     private function validatedItem(Request $request): array
