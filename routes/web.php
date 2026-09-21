@@ -12,6 +12,8 @@ Route::prefix('main')->group(function () {
 
     Route::get('/trash', [ItemController::class, 'trash'])->name('main.trash');
 
+    Route::delete('/trash', [ItemController::class, 'emptyTrash'])->name('main.trash.empty');
+
     Route::get('/create', [ItemController::class, 'create'])->name('main.create');
 
     Route::post('/', [ItemController::class, 'store'])->name('main.store');
@@ -24,6 +26,6 @@ Route::prefix('main')->group(function () {
 
     Route::delete('/{item}', [ItemController::class, 'destroy'])->name('main.destroy');
 
-    
+    Route::delete('/{item}/force', [ItemController::class, 'permenentDelete'])->withTrashed()->name('main.force-delete');
 
 });

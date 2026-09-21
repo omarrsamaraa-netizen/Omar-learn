@@ -13,7 +13,7 @@ it('lists items on the index page', function () {
         ->assertOk()
         ->assertSee('Gold Wristwatch')
         ->assertSee('/main/'.$item->id)
-        ->assertSee(route('main.trash'));
+        ->assertSee('href="'.route('main.trash').'"', false);
 });
 
 it('shows the create form', function () {
@@ -75,7 +75,31 @@ it('lists only trashed items on the trash page', function () {
         ->assertOk()
         ->assertSee('Discarded Cufflinks')
         ->assertDontSee('Kept Overcoat')
-        ->assertDontSee(route('main.trash'));
+        ->assertDontSee('href="'.route('main.trash').'"', false);
+});
+
+it('permanently deletes a trashed item from the trash page', function () {
+    $item = Item::factory()->create();
+    $item->delete();
+
+    $this->delete(route('main.force-delete', $item))
+        ->assertRedirect(route('main.index'))
+        ->assertSessionHas('status');
+
+    expect(Item::withTrashed()->find($item->id))->toBeNull();
+});
+
+it('empties the trash without touching live items', function () {
+    $trashed = Item::factory()->count(3)->create();
+    $kept = Item::factory()->create(['name' => 'Kept Overcoat']);
+    $trashed->each->delete();
+
+    $this->delete(route('main.trash.empty'))
+        ->assertRedirect(route('main.trash'))
+        ->assertSessionHas('status');
+
+    expect(Item::withTrashed()->count())->toBe(1)
+        ->and(Item::withTrashed()->first()->name)->toBe('Kept Overcoat');
 });
 
 it('shows a trashed item from the trash page', function () {

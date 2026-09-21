@@ -40,14 +40,12 @@ class ItemController extends Controller
         $validate = $request->validate([
             'name' => 'required|string|max:255',
             'caption' => 'required|string|max:1000',
-        
-
 
         ]);
 
         return redirect()
-            ->route('main.show', $item)
-            ->with('status', 'Piece added to the collection.');
+            ->route('main.index', $item)
+            ->with('success', 'Piece added to the collection.');
     }
 
     public function show(Item $item): View
@@ -95,6 +93,15 @@ class ItemController extends Controller
             ->with('status', 'Piece removed completly from the collection.');
     }
 
+    public function emptyTrash(): RedirectResponse
+    {
+        Item::onlyTrashed()->forceDelete();
+
+        return redirect()
+            ->route('main.trash')
+            ->with('status', 'The trash is now empty.');
+    }
+
     public function restore(Item $item): RedirectResponse
     {
         if ($item->trashed()) {
@@ -109,10 +116,12 @@ class ItemController extends Controller
     private function validatedItem(Request $request): array
     {
         return $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+             'name' => ['required', 'string', 'max:255'],
             'rate' => ['required', 'integer', 'between:0,100'],
             'caption' => ['required', 'string', 'max:5000'],
             'category_id' => ['required', 'exists:categories,id'],
         ]);
     }
 }
+
+// suck my dick
