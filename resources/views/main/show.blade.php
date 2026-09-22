@@ -8,9 +8,21 @@
 
     <p class="mt-4 text-[0.72rem] uppercase tracking-[0.16em] text-brass">Rating &mdash; {{ $item->rate }} / 100</p>
 
+    <form method="POST" action="{{ route('cart.store', $item) }}" class="mt-8 flex flex-wrap items-end gap-4">
+        @csrf
+
+        <div class="field">
+            <label for="quantity" class="field-label">Quantity</label>
+            <input type="number" id="quantity" name="quantity" value="1" min="1" max="99" class="input w-24" required>
+        </div>
+
+        <button type="submit" class="btn">Add to cart</button>
+        @error('quantity')<p class="field-error">{{ $message }}</p>@enderror
+    </form>
+
     <div class="mt-8 flex flex-wrap items-center gap-4">
         <a href="{{ route('main.edit', $item) }}" class="btn">Edit piece</a>
-
+ 
         <form method="POST" action="{{ route('main.destroy', $item) }}"
               onsubmit="return confirm('Remove this piece from the collection?');">
             @csrf

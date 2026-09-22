@@ -9,20 +9,19 @@ return new class extends Migration
     
     public function up(): void
     {
-        Schema::create('items', function (Blueprint $table) {
+        Schema::create('order_items', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('order_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('item_id')->constrained();
             $table->string('name');
-            $table->integer('rate');
-            $table->text('caption');
+            $table->unsignedInteger('quantity');
             $table->timestamps();
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
-
         });
     }
 
     
     public function down(): void
     {
-        Schema::dropIfExists('items');
+        Schema::dropIfExists('order_items');
     }
 };

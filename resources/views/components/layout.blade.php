@@ -20,6 +20,7 @@
             <div class="nav-links">
                 <a href="/main" class="nav-link">Collection</a>
                 <a href="/main/create" class="nav-link">Add piece</a>
+                <a href="{{ route('cart.index') }}" class="nav-link">Cart ({{ \App\Http\Controllers\CartController::currentCart()?->totalQuantity() ?? 0 }})</a>
             </div>
         </nav>
     </header>
