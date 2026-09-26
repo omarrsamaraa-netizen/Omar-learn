@@ -28,5 +28,7 @@ class DatabaseSeeder extends Seeder
             ItemsSeeder::class,
         ]);
 
+        $this->call(RoleSeeder::class);
+
     }
 }
