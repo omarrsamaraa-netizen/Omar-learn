@@ -2,9 +2,17 @@
 
 use App\Models\Category;
 use App\Models\Item;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
+
+/**
+ * Managing the collection is admin-only, so these tests act as an admin.
+ */
+beforeEach(function () {
+    $this->actingAs(User::factory()->admin()->create());
+});
 
 it('lists items on the index page', function () {
     $item = Item::factory()->create(['name' => 'Gold Wristwatch']);

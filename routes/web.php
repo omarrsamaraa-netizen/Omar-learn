@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\OrderController;
@@ -13,23 +15,27 @@ Route::get('/', function () {
 Route::prefix('main')->group(function () {
     Route::get('/', [ItemController::class, 'index'])->name('main.index');
 
-    Route::get('/trash', [ItemController::class, 'trash'])->name('main.trash');
+    Route::middleware(AdminMiddleware::class)->group(function () {
+        Route::get('/trash', [ItemController::class, 'trash'])->name('main.trash');
 
-    Route::delete('/trash', [ItemController::class, 'emptyTrash'])->name('main.trash.empty');
+        Route::delete('/trash', [ItemController::class, 'emptyTrash'])->name('main.trash.empty');
 
-    Route::get('/create', [ItemController::class, 'create'])->name('main.create');
+        Route::get('/create', [ItemController::class, 'create'])->name('main.create');
 
-    Route::post('/', [ItemController::class, 'store'])->name('main.store');
+        Route::post('/', [ItemController::class, 'store'])->name('main.store');
+    });
 
     Route::get('/{item}', [ItemController::class, 'show'])->withTrashed()->name('main.show');
 
-    Route::get('/{item}/edit', [ItemController::class, 'edit'])->name('main.edit');
+    Route::middleware(AdminMiddleware::class)->group(function () {
+        Route::get('/{item}/edit', [ItemController::class, 'edit'])->name('main.edit');
 
-    Route::put('/{item}', [ItemController::class, 'update'])->name('main.update');
+        Route::put('/{item}', [ItemController::class, 'update'])->name('main.update');
 
-    Route::delete('/{item}', [ItemController::class, 'destroy'])->name('main.destroy');
+        Route::delete('/{item}', [ItemController::class, 'destroy'])->name('main.destroy');
 
-    Route::delete('/{item}/force', [ItemController::class, 'permenentDelete'])->withTrashed()->name('main.force-delete');
+        Route::delete('/{item}/force', [ItemController::class, 'permenentDelete'])->withTrashed()->name('main.force-delete');
+    });
 
     Route::resource('products', ItemController::class);
 
@@ -69,3 +75,13 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
     Route::delete('/admin/products/{product}', [ItemController::class, 'destroy']);
 
 });
+
+Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
+
+Route::post('/register', [RegisteredUserController::class, 'store'])->name('register.store');
+
+Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
+
+Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login.store');
+
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');

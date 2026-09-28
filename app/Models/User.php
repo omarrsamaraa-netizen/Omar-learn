@@ -10,6 +10,10 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+    public const ROLE_ADMIN = 'admin';
+
+    public const ROLE_CUSTOMER = 'customer';
+
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
@@ -47,22 +51,13 @@ class User extends Authenticatable
         ];
     }
 
-    public function role()
-{
-    return $this->belongsTo(Role::class);
-    $user = auth()->user();
-
-    $role = $user->role;
-
-    return $role->name;
-
-    if ($user->role->name === 'Admin') {
-    
-
-    if ($user->role->name === 'Customer') {
-    
-}
-
-}
-}
+    /**
+     * Whether this user may manage the collection.
+     *
+     * The role is compared without case so a row written as "Admin" counts too.
+     */
+    public function isAdmin(): bool
+    {
+        return strtolower((string) $this->role) === self::ROLE_ADMIN;
+    }
 }

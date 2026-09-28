@@ -21,19 +21,19 @@
     </form>
 
     <div class="mt-8 flex flex-wrap items-center gap-4">
-        <a href="{{ route('main.edit', $item) }}" class="btn">Edit piece</a>
- 
-        <form method="POST" action="{{ route('main.destroy', $item) }}"
-              onsubmit="return confirm('Remove this piece from the collection?');">
-            @csrf
-            @method('DELETE')
+        @can('manage-collection')
+            <a href="{{ route('main.edit', $item) }}" class="btn">Edit piece</a>
 
-            <button type="submit" class="btn btn-espresso">Remove piece</button>
-        </form>
+            <form method="POST" action="{{ route('main.destroy', $item) }}"
+                  onsubmit="return confirm('Remove this piece from the collection?');">
+                @csrf
+                @method('DELETE')
+
+                <button type="submit" class="btn btn-espresso">Remove piece</button>
+            </form>
+        @endcan
 
         <a href="{{ route('main.index') }}" class="nav-link">Back to collection</a>
-
-
     </div>
 
     <div class="border-2 border-dashed bg-white px-4 pb-4 my-4 rounded">

@@ -19,10 +19,25 @@
 
             <div class="nav-links">
                 <a href="/main" class="nav-link">Collection</a>
-                <a href="/main/create" class="nav-link">Add piece</a>
+                @can('manage-collection')
+                    <a href="/main/create" class="nav-link">Add piece</a>
+                @endcan
                 <a href="{{ route('cart.index') }}" class="nav-link">Cart ({{ \App\Http\Controllers\CartController::currentCart()?->totalQuantity() ?? 0 }})</a>
+                @guest
+                    <a href="{{ route('login') }}" class="nav-link">Log in</a>
+                    <a href="{{ route('register') }}" class="nav-link">Register</a>
+                @else
+                    <span class="nav-link">{{ auth()->user()->name }}</span>
+
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+
+                        <button type="submit" class="nav-link">Log out</button>
+                    </form>
+                @endguest
             </div>
         </nav>
+        <img src="{{ asset('') }}" alt="">
     </header>
 
     <main class="page">

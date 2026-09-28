@@ -6,7 +6,9 @@
             <p class="lead">Be a gentleman.</p>
         </div>
 
-        <a href="{{ route('main.trash') }}" class="btn btn-espresso">Trash</a>
+        @can('manage-collection')
+            <a href="{{ route('main.trash') }}" class="btn btn-espresso">Trash</a>
+        @endcan
     </div>
 
     <ul class="card-grid">
