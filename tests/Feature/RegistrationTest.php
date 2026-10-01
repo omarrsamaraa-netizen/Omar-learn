@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
@@ -27,7 +28,7 @@ it('registers a new user and logs them in', function () {
 
     expect($user)->not->toBeNull()
         ->and($user->name)->toBe('Omar Samara')
-        ->and($user->role)->toBe('customer');
+        ->and($user->role->name)->toBe(Role::CUSTOMER);
 
     $this->assertAuthenticatedAs($user);
 
@@ -101,5 +102,5 @@ it('does not let the form choose its own role', function () {
         'role' => 'admin',
     ]);
 
-    expect(User::firstWhere('email', 'omar@example.com')->role)->toBe('customer');
+    expect(User::firstWhere('email', 'omar@example.com')->role->name)->toBe(Role::CUSTOMER);
 });

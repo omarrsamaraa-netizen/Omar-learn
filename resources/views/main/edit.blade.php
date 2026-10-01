@@ -4,7 +4,7 @@
         <h2>Edit &mdash; {{ $item->name }}</h2>
     </div>
 
-    <form method="POST" action="{{ route('main.update', $item) }}" class="form">
+    <form method="POST" action="{{ route('main.update', $item) }}" class="form" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -40,6 +40,20 @@
             <label for="caption" class="field-label">Caption</label>
             <textarea id="caption" name="caption" rows="5" class="input" required>{{ old('caption', $item->caption) }}</textarea>
             @error('caption')<p class="field-error">{{ $message }}</p>@enderror
+        </div>
+
+        {{-- item picture --}}
+        <div class="field">
+            <label for="image" class="field-label">Picture</label>
+
+            @if ($item->image)
+                <img src="{{ asset('storage/'.$item->image) }}" alt="{{ $item->name }}"
+                     class="mb-2 h-40 w-40 border border-hairline object-cover">
+            @endif
+
+            <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/webp" class="input">
+            <p class="text-sm text-muted">Leave empty to keep the current picture.</p>
+            @error('image')<p class="field-error">{{ $message }}</p>@enderror
         </div>
 
         <div class="form-actions">

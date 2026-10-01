@@ -4,7 +4,7 @@
         <h2>Add an item</h2>
     </div>
 
-    <form  action="{{ route('main.store') }}" method="POST" class="form">
+    <form action="{{ route('main.store') }}" method="POST" class="form" enctype="multipart/form-data">
         @csrf
 
         {{-- item name --}}
@@ -40,6 +40,13 @@
             <label for="caption" class="field-label">Caption</label>
             <textarea id="caption" name="caption" rows="5" class="input" required>{{ old('caption') }}</textarea>
             @error('caption')<p class="field-error">{{ $message }}</p>@enderror
+        </div>
+
+        {{-- item picture --}}
+        <div class="field">
+            <label for="image" class="field-label">Picture (optional)</label>
+            <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/webp" class="input">
+            @error('image')<p class="field-error">{{ $message }}</p>@enderror
         </div>
 
         <div class="form-actions">

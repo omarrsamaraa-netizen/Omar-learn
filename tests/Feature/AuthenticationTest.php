@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Item;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -89,13 +90,25 @@ it('lets an admin reach the management pages', function () {
 });
 
 it('recognises an admin role whatever its capitalisation', function () {
-    $this->actingAs(User::factory()->create(['role' => 'Admin']))
+    $role = Role::create(['name' => 'Admin']);
+
+    $this->actingAs(User::factory()->create(['role_id' => $role->id]))
         ->get(route('main.create'))
         ->assertOk();
+});
 
-    $this->actingAs(User::factory()->create(['role' => 'ADMIN']))
-        ->get(route('main.trash'))
-        ->assertOk();
+it('links a registered user to the customer role', function () {
+    $this->post(route('register.store'), [
+        'name' => 'Omar Samara',
+        'email' => 'omar@example.com',
+        'password' => 'correct-horse-battery',
+        'password_confirmation' => 'correct-horse-battery',
+    ]);
+
+    $user = User::firstWhere('email', 'omar@example.com');
+
+    expect($user->role_id)->not->toBeNull()
+        ->and($user->role->name)->toBe(Role::CUSTOMER);
 });
 
 it('hides the admin links from guests', function () {

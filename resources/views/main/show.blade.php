@@ -4,6 +4,11 @@
         <h2>{{ $item->name }}</h2>
     </div>
 
+    @if ($item->image)
+        <img src="{{ asset('storage/'.$item->image) }}" alt="{{ $item->name }}"
+             class="mt-8 max-h-96 w-full border border-hairline object-cover">
+    @endif
+
     <p class="lead">{{ $item->caption }}</p>
 
     <p class="mt-4 text-[0.72rem] uppercase tracking-[0.16em] text-brass">Rating &mdash; {{ $item->rate }} / 100</p>

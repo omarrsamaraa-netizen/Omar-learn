@@ -37,7 +37,7 @@
                 @endguest
             </div>
         </nav>
-        <img src="{{ asset('') }}" alt="">
+        
     </header>
 
     <main class="page">

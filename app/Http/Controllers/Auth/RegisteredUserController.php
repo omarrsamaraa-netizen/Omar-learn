@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -25,16 +26,14 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'string', 'confirmed', Password::defaults()],
         ]);
 
-        $user = User::create($validated);
-
+        $user = User::create([
+            ...$validated,
+            'role_id' => Role::firstOrCreate(['name' => Role::CUSTOMER])->id,
+        ]);
 
         $request->session()->regenerate();
 
-        
-
         Auth::login($user);
-
-        
 
         return redirect()
             ->route('main.index')

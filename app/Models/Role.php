@@ -2,17 +2,24 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Role extends Model
 {
-     protected $fillable = [
+    use HasFactory;
+
+    public const ADMIN = 'admin';
+
+    public const CUSTOMER = 'customer';
+
+    protected $fillable = [
         'name',
     ];
-    
+
+    public function users(): HasMany
+    {
+        return $this->hasMany(User::class);
+    }
 }
-$user = User::find(1);
-
-$user->role_id = 1;
-
-$user->save();

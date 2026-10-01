@@ -115,12 +115,24 @@ class ItemController extends Controller
 
     private function validatedItem(Request $request): array
     {
-        return $request->validate([
-             'name' => ['required', 'string', 'max:255'],
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
             'rate' => ['required', 'integer', 'between:0,100'],
             'caption' => ['required', 'string', 'max:5000'],
             'category_id' => ['required', 'exists:categories,id'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:2048'],
         ]);
+
+        /**
+         * Keep the picture already on the piece when the form is sent without a new one.
+         */
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('items', 'public');
+        } else {
+            unset($validated['image']);
+        }
+
+        return $validated;
     }
 }
 

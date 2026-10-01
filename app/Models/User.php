@@ -5,15 +5,12 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    public const ROLE_ADMIN = 'admin';
-
-    public const ROLE_CUSTOMER = 'customer';
-
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
@@ -26,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role_id',
     ];
 
     /**
@@ -51,13 +49,18 @@ class User extends Authenticatable
         ];
     }
 
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class);
+    }
+
     /**
      * Whether this user may manage the collection.
      *
-     * The role is compared without case so a row written as "Admin" counts too.
+     * The role name is compared without case so a row written as "Admin" counts too.
      */
     public function isAdmin(): bool
     {
-        return strtolower((string) $this->role) === self::ROLE_ADMIN;
+        return strtolower((string) $this->role?->name) === Role::ADMIN;
     }
 }
