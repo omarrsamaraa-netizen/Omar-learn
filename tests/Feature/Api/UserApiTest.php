@@ -6,31 +6,21 @@ use Laravel\Sanctum\Sanctum;
 
 uses(RefreshDatabase::class);
 
-it('lists users for an admin without exposing passwords', function () {
-    User::factory()->count(2)->create();
-    Sanctum::actingAs(User::factory()->admin()->create());
+it('returns the authenticated user info without the password', function () {
+    $user = User::factory()->create();
+    Sanctum::actingAs($user);
 
-    $this->getJson(route('api.users.index'))
+    $this->getJson(route('api.user.show'))
         ->assertOk()
-        ->assertJsonCount(3, 'data')
-        ->assertJsonMissingPath('data.0.password');
+        ->assertJsonPath('data.id', $user->id)
+        ->assertJsonPath('data.email', $user->email)
+        ->assertJsonPath('data.role', 'customer')
+        ->assertJsonMissingPath('data.password')
+        ->assertJsonMissingPath('data.remember_token');
 });
 
-it('filters users by search term', function () {
-    User::factory()->create(['name' => 'Layla Haddad']);
-    User::factory()->create(['name' => 'Omar Samara']);
-    Sanctum::actingAs(User::factory()->admin()->create(['name' => 'Admin']));
-
-    $this->getJson(route('api.users.index', ['search' => 'Layla']))
-        ->assertOk()
-        ->assertJsonCount(1, 'data')
-        ->assertJsonPath('data.0.name', 'Layla Haddad');
-});
-
-it('forbids customers from listing users', function () {
-    Sanctum::actingAs(User::factory()->create());
-
-    $this->getJson(route('api.users.index'))->assertForbidden();
+it('requires a token for user info', function () {
+    $this->getJson(route('api.user.show'))->assertUnauthorized();
 });
 
 it('issues a token for valid credentials', function () {

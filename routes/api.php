@@ -4,13 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Middleware\AdminMiddleware;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
 
 Route::get('/luxury', function () {
     return response()->json([
@@ -42,5 +36,5 @@ Route::middleware('auth:sanctum')->name('api.')->group(function () {
 
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
 
-    Route::get('/users', [UserController::class, 'index'])->middleware(AdminMiddleware::class)->name('users.index');
+    Route::get('/user', [UserController::class, 'show'])->name('user.show');
 });
